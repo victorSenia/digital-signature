@@ -1,0 +1,39 @@
+[
+[
+  Version: V3
+  Subject: CN=Leo, OU=Concept, O=Test, L=Kharkiv, ST=Ukraine, C=UA
+  Signature Algorithm: SHA256withECDSA, OID = 1.2.840.10045.4.3.2
+
+  Key:  Sun EC public key, 571 bits
+  public x coord: 5764204743708756695473081637885099079107238538389445197204931735599052568652364294741984271289524292276480337714279524938266973158510251817522172480447193223989081069469225
+  public y coord: 4782798795194592260142373040426706076872463346082146729200086908275788051896022715813483765115562606651950600793505984091927066094334178994170407036746163524778077386982189
+  parameters: sect571k1 [NIST K-571] (1.3.132.0.38)
+  Validity: [From: Tue Nov 15 10:43:04 EET 2016,
+               To: Mon Feb 13 10:43:04 EET 2017]
+  Issuer: CN=Leo, OU=Concept, O=Test, L=Kharkiv, ST=Ukraine, C=UA
+  SerialNumber: [    148603f0]
+
+Certificate Extensions: 1
+[1]: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: DD 40 8F A8 E7 6A E0 99   7D 70 E1 95 12 11 1A 51  .@...j...p.....Q
+0010: 4C E5 F4 E8                                        L...
+]
+]
+
+]
+  Algorithm: [SHA256withECDSA]
+  Signature:
+0000: 30 81 93 02 48 01 FB BD   F0 84 36 2C 17 0D 93 B1  0...H.....6,....
+0010: C3 DC BE 7C 37 78 75 22   E0 B1 4F C8 31 8F CD 0C  ....7xu"..O.1...
+0020: 58 69 43 2A D1 A6 2B 3F   3C 75 2A 9A A9 A9 7B 9A  XiC*..+?<u*.....
+0030: A4 B4 74 A2 33 E8 B0 31   75 EF 32 79 76 B8 06 39  ..t.3..1u.2yv..9
+0040: 1F 5E D1 D7 13 7D 03 04   EA C5 AD 1E 49 02 47 63  .^..........I.Gc
+0050: 89 9D E9 8A D1 E6 59 4E   40 C2 18 AF 90 51 F4 C8  ......YN@....Q..
+0060: D3 F8 A9 30 63 24 2E 78   30 4F AB FF A9 80 5F F5  ...0c$.x0O...._.
+0070: 87 37 59 07 02 19 92 0F   C7 92 F8 BA E5 55 75 98  .7Y..........Uu.
+0080: 5D 89 49 A5 21 40 25 EA   F7 1F A3 4E 63 13 21 A0  ].I.!@%....Nc.!.
+0090: 35 7E 5A A8 AB F1                                  5.Z...
+
+]
