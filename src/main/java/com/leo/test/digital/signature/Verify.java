@@ -20,9 +20,9 @@ public class Verify extends General {
             byte[] bytesToVerify = read(new FileInputStream(args[1]));
             Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM);
             // TODO get public key from file or certificate from storage
-//                        PublicKey publicKey = getPublicKey(args[0]);
-//                        signature.initVerify(publicKey);
-            Certificate certificate = getCertificate(new FileInputStream(STORE), STORE_PASSWORD, ALIAS);
+            //            PublicKey publicKey = getPublicKey(args[0]);
+            //            signature.initVerify(publicKey);
+            Certificate certificate = getCertificate(ALIAS);
             signature.initVerify(certificate);
             update(signature, new FileInputStream(args[2]));
             System.out.println("signature verifies: " + signature.verify(bytesToVerify));

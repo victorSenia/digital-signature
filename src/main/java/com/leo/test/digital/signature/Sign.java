@@ -23,12 +23,6 @@ public class Sign extends General {
     // "C:\Program Files\Java\jdk1.8.0_92\bin\keytool" -list -v -keystore test.jks -storepass test
     // "C:\Program Files\Java\jdk1.8.0_92\bin\keytool" -delete -v -keystore test.jks -storepass test -alias testtest
 
-    private static SecureRandom secureRandom;
-
-    private static void secureRandom() throws NoSuchProviderException, NoSuchAlgorithmException {
-        secureRandom = SecureRandom.getInstanceStrong();
-    }
-
     public static void main(String... args) {
         //        for (Provider provider : Security.getProviders()) {
         //            System.out.println(provider.getName());
@@ -37,14 +31,13 @@ public class Sign extends General {
         //        System.out.println("CertificateFactory Algorithms: " + Security.getAlgorithms("Certificate"));
         args = new String[]{FILE_NAME};
         try {
-            secureRandom();
             Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM);
             PrivateKey key;
             // TODO get private key from storage, file, or generate to storage (key and certificate) or files (private and public keys)
-            key = getPrivateKey(new FileInputStream(STORE), STORE_PASSWORD, ALIAS, ALIAS_PASSWORD);
+            key = getKey(ALIAS, ALIAS_PASSWORD);
             //            key = fromFilePrivateKey();
-            //            key = generateCertificate();
-            //            key = generatePrivateKey();
+//          key = generateCertificate();
+//                        key = generatePrivateKey();
             signature.initSign(key, secureRandom);
             update(signature, new FileInputStream(args[0]));
             byte[] sign = signature.sign();
@@ -88,7 +81,7 @@ public class Sign extends General {
         gen.generate(KEY_SIZE);
         PrivateKey key = gen.getPrivateKey();
         X509Certificate cert = gen.getSelfCertificate(new X500Name("CN=Leo, OU=Concept, O=Test, L=Kharkiv, ST=Ukraine, C=UA"), (long) 365 * 24 * 3600);
-        storeKey(new FileOutputStream(STORE), STORE_PASSWORD, ALIAS, ALIAS_PASSWORD, key, new X509Certificate[]{cert});
+        storeKeyEntry(new FileOutputStream(STORE), STORE_PASSWORD, ALIAS, ALIAS_PASSWORD, key, new X509Certificate[]{cert});
         return key;
     }
 

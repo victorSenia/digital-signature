@@ -1,11 +1,12 @@
 package com.leo.test.digital.signature;
 
+import javax.crypto.SecretKey;
 import java.io.*;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
-import java.util.Arrays;
+import java.util.Enumeration;
 
 /**
  * Created by Senchenko Victor on 11.11.2016.
@@ -46,7 +47,7 @@ public class General {
     protected static final String KEY_PAIR_GENERATOR_PROVIDER = "SunEC";
 
     // KeyStore Types: [JKS, JCEKS, PKCS12, CASEEXACTJKS, DKS, WINDOWS-ROOT, WINDOWS-MY]
-    protected static final String KEY_STORE_TYPE = "JKS";
+    protected static final String KEY_STORE_TYPE = "JCEKS";
 
     // CertificateFactory Types: [X.509]
     protected static final String CERTIFICATE_FACTORY_TYPE = "X.509";
@@ -55,15 +56,22 @@ public class General {
 
     protected static KeyStore keyStore;
 
+    protected static SecureRandom secureRandom;
+
     static {
         try {
             keyStore = getKeyStore();
         } catch (IOException | CertificateException | KeyStoreException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
+        try {
+            secureRandom = SecureRandom.getInstanceStrong();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void main(String... args) {
+    public static void main(String... args) throws Exception {
         Sign.main(args);
         Verify.main(args);
     }
@@ -79,12 +87,10 @@ public class General {
     }
 
     protected static byte[] read(InputStream inputStream) throws IOException {
-        byte[] bytes = null;
-        try {
-            bytes = new byte[inputStream.available()];
-            inputStream.read(bytes);
-        } finally {
-            inputStream.close();
+        byte[] bytes;
+        try (BufferedInputStream stream = new BufferedInputStream(inputStream)) {
+            bytes = new byte[stream.available()];
+            stream.read(bytes);
         }
         return bytes;
     }
@@ -97,11 +103,11 @@ public class General {
         }
     }
 
-    protected static PrivateKey getPrivateKey(InputStream inputStream, char[] storePass, String alias, char[] keyPass) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException {
-        return (PrivateKey) keyStore.getKey(alias, keyPass);
+    protected static <T> T getKey(String alias, char[] keyPass) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException {
+        return (T) keyStore.getKey(alias, keyPass);
     }
 
-    protected static Certificate getCertificate(InputStream inputStream, char[] storePass, String alias) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException {
+    protected static Certificate getCertificate(String alias) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException {
         return keyStore.getCertificate(alias);
     }
 
@@ -124,8 +130,15 @@ public class General {
         }
     }
 
-    protected static void storeKey(OutputStream outputStream, char[] storePass, String alias, char[] keyPass, PrivateKey key, Certificate[] chain) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
+    protected static void storeKeyEntry(OutputStream outputStream, char[] storePass, String alias, char[] keyPass, Key key, Certificate[] chain) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
         keyStore.setKeyEntry(alias, key, keyPass, chain);
+        try (BufferedOutputStream stream = new BufferedOutputStream(outputStream)) {
+            keyStore.store(stream, storePass);
+        }
+    }
+
+    protected static void storeKeyEntry(OutputStream outputStream, char[] storePass, String alias, char[] keyPass,SecretKey key) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException {
+        keyStore.setEntry(alias, new KeyStore.SecretKeyEntry(key), new KeyStore.PasswordProtection(keyPass));
         try (BufferedOutputStream stream = new BufferedOutputStream(outputStream)) {
             keyStore.store(stream, storePass);
         }
